@@ -1,0 +1,48 @@
+{% load staticfiles %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'ToDo/style.css' %}" />
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.js"></script>
+<script type="text/javascript" src="{% static 'ToDo/jquery.editable.min.js' %}"></script>
+<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.1/themes/base/jquery-ui.css"/>
+
+<div id="mainBodyContainer">
+{% if tasklists %}
+	{% for tasklist in tasklists %}
+    <div class="widgetContainer" title="{{ tasklist.id }}" style="top:{{tasklist.top}};left:{{tasklist.left}}">
+        <div class="widget" title="{{ tasklist.id }}" style="width:{{tasklist.width}};height:{{tasklist.height}}">
+            <div class="TaskList" id="{{tasklist.id}}">
+                <h3><a href="tasklist/{{tasklist.id}}/">{{ tasklist.title }}</a></h3>
+                {% for task in tasklist.task_set.all %}
+                {% if task.status >= 0 %}
+                    <form action="{% url 'ToDo:check' task.id %}" method="post" data-taskid="{{task.id}}" data-taskStatus="{{task.status}}">
+                        {% csrf_token %}
+                        <input type="checkbox" class="task" name="task" value="{{task.id}}"
+                        {% if task.status == 1 %}
+                            checked
+                        {% endif %}
+                        ><div class="taskTitle" title="{{ task.id }}">{{ task.title }}</div></input><br />
+                    </form>
+                {% endif %}
+                {% endfor %}
+                <div id="result"></div>
+            </div>
+            <div class="buttons" title="{{ tasklist.id }}">
+                <div class="addTaskButton">
+                    <img src="/static/ToDo/plus.svg" width="15px" height="15px" />
+                </div>
+                <div class="trashButton">
+                    <img src="/static/ToDo/trash.svg" width="15px" height="15px" />
+                </div>
+            </div>
+        </div>
+    </form>
+    </div>
+
+	{% endfor %}
+{% else %}
+	<p>No TaskLists are available.</p>
+{% endif %}
+</div>
+
+<script type="text/javascript" src="{% static 'ToDo/scripts.js' %}"></script>

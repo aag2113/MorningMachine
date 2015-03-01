@@ -1,0 +1,7 @@
+venv/
+MorningMachine/.idea/
+*.pyc
+MorningMachine/ToDo/static/ToDo/smb_coin.wav
+MorningMachine/db.sqlite3
+ToDo/migrations/
+

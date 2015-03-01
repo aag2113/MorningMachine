@@ -1,0 +1,7 @@
+<h1>{{ task.title }}</h1>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<p><b>Member of:</b> {{ task.taskList }}</p>
+<p><b>Created:</b> {{ task.created_date }}</p>
+<p><b>Status:</b> {{ task.status }}</p>
