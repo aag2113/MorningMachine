@@ -82,4 +82,14 @@ def generateTaskForm(task):
 	result += '><div class="taskTitle" title="'+repr(task.id)+'"> '+task.title+'</div></input><br /></form>'
 	return result
 
+def renderTaskList(tasklist_id):
+	tl = TaskList.objects.get(pk=tasklist_id)
+	tlHTML = '<div id="tasks">'
+	for t in tl:
+		if tl.status >= 0:
+			tlHTML += generateTaskForm(t)
+	tlHTML += '</div>'
+	return tlHTML
+
+
 	

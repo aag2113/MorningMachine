@@ -13,18 +13,20 @@
         <div class="widget" title="{{ tasklist.id }}" style="width:{{tasklist.width}};height:{{tasklist.height}}">
             <div class="TaskList" id="{{tasklist.id}}">
                 <h3><a href="tasklist/{{tasklist.id}}/">{{ tasklist.title }}</a></h3>
-                {% for task in tasklist.task_set.all %}
-                {% if task.status >= 0 %}
-                    <form action="{% url 'ToDo:check' task.id %}" method="post" data-taskid="{{task.id}}" data-taskStatus="{{task.status}}">
-                        {% csrf_token %}
-                        <input type="checkbox" class="task" name="task" value="{{task.id}}"
-                        {% if task.status == 1 %}
-                            checked
-                        {% endif %}
-                        ><div class="taskTitle" title="{{ task.id }}">{{ task.title }}</div></input><br />
-                    </form>
-                {% endif %}
-                {% endfor %}
+                <div class="tasks">
+                    {% for task in tasklist.task_set.all %}
+                    {% if task.status >= 0 %}
+                        <form action="{% url 'ToDo:check' task.id %}" method="post" data-taskid="{{task.id}}" data-taskStatus="{{task.status}}">
+                            {% csrf_token %}
+                            <input type="checkbox" class="task" name="task" value="{{task.id}}"
+                            {% if task.status == 1 %}
+                                checked
+                            {% endif %}
+                            ><div class="taskTitle" title="{{ task.id }}">{{ task.title }}</div></input><br />
+                        </form>
+                    {% endif %}
+                    {% endfor %}
+                </div>
                 <div id="result"></div>
             </div>
             <div class="buttons" title="{{ tasklist.id }}">
@@ -43,6 +45,14 @@
 {% else %}
 	<p>No TaskLists are available.</p>
 {% endif %}
+</div>
+<div id="footer">
+    <div class="buttons" title="footer">
+        <div class="addTaskListButton">
+            <img src="/static/ToDo/plus.svg" width="15px" height="15px" />
+            New List
+        </div>
+    </div>
 </div>
 
 <script type="text/javascript" src="{% static 'ToDo/scripts.js' %}"></script>
