@@ -40,8 +40,7 @@ $('.addTaskButton').click(function(){
         async: true,
         url: '/ToDo/task/create/',
         data:  { 'title': "newTask", 'csrfmiddlewaretoken': token, 'taskList': this.parentElement.title },
-        //dataType: "json",
-        //contentType: "application/json; charset=utf-8",
+
         success: function (msg) 
                 { 
                 	$('#'+taskListID).append(msg)
@@ -53,21 +52,27 @@ $('.addTaskButton').click(function(){
     });
 });
 
-/*
-$('.addTaskButton').click(function(){
-	var token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
-	$.post( "/ToDo/task/create/", { 'title': "newTask", 'csrfmiddlewaretoken': token, 'taskList': this.parentElement.title } );
-});
-*/
-
 $('.trashButton').click(function(){
 	var token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
 	taskListID = this.parentElement.title
 	console.log(taskListID)
-	$.post( "/ToDo/tasklist/"+taskListID+"/clearCompleted/", { 'csrfmiddlewaretoken': token, 'taskList': taskListID } );
-	$("#"+taskListID+" form[data-taskstatus=1]").each(function(){
-		$(this).remove();
-	});
+	jQuery.ajax({
+        type: "POST",
+        async: true,
+        url: "/ToDo/tasklist/"+taskListID+"/clearCompleted/",
+        data:  { 'csrfmiddlewaretoken': token, 'taskList': taskListID },
+
+        success: function(msg)
+			{
+				$('.tasks[data-tasklistid="' + taskListID + '"]').replaceWith(msg)
+			},
+		error: function(err)
+			{
+				alert(err.responseText)
+			}
+    });
+
+
 });
 
 
@@ -75,19 +80,34 @@ function saveWidgetSize(id, width, height){
 	console.log(width);
 	console.log(height);
 	var token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
-	$.post( "/ToDo/tasklist/"+id+"/saveWidgetSize/", { 'w': width, 'h':height, 'csrfmiddlewaretoken': token } );
+	jQuery.ajax({
+        type: "POST",
+        async: true,
+        url: "/ToDo/tasklist/"+id+"/saveWidgetSize/",
+        data:  { 'w': width, 'h':height, 'csrfmiddlewaretoken': token },
+    });
 }
 
 function saveWidgetPosition(id, top, left){
 	console.log(top);
 	console.log(left);
 	var token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
-	$.post( "/ToDo/tasklist/"+id+"/saveWidgetPos/", { 't': top, 'l':left, 'csrfmiddlewaretoken': token } );
+	jQuery.ajax({
+        type: "POST",
+        async: true,
+        url: "/ToDo/tasklist/"+id+"/saveWidgetPos/",
+        data:  { 't': top, 'l':left, 'csrfmiddlewaretoken': token },
+    });
 }
 
 function updateTaskTitle(id, title){
 	var token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
-	$.post( "/ToDo/task/"+id+"/updateTitle/", { 'title': title, 'csrfmiddlewaretoken': token } );
+	jQuery.ajax({
+        type: "POST",
+        async: true,
+        url: "/ToDo/task/"+id+"/updateTitle/",
+        data:  { 'title': title, 'csrfmiddlewaretoken': token },
+    });
 }
 
 

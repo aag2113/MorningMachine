@@ -8,7 +8,6 @@ import json
 
 from ToDo.models import TaskList, Task
 
-
 class IndexView(generic.ListView):
     template_name = 'ToDo/index.html'
     context_object_name = 'tasklists'
@@ -72,24 +71,21 @@ def clearCompleted(request, tasklist_id):
 		if t.status == 1:
 			t.status=-1
 			t.save()
-	return HttpResponseRedirect(reverse('ToDo:index'))
+	return HttpResponse(renderTaskList(tasklist_id))
 
 def generateTaskForm(task):
 	result = '<form action="/ToDo/task/'+repr(task.id)+'/check/" method="post">'
 	result += '<input type="checkbox" class="task" name="task" value="'+repr(task.id)
 	if task.status == 1:
 		result += 'checked'
-	result += '><div class="taskTitle" title="'+repr(task.id)+'"> '+task.title+'</div></input><br /></form>'
+	result += '><div class="taskTitle" title="'+repr(task.id)+'"> '+task.title+'</div></input></form>'
 	return result
 
 def renderTaskList(tasklist_id):
 	tl = TaskList.objects.get(pk=tasklist_id)
-	tlHTML = '<div id="tasks">'
-	for t in tl:
-		if tl.status >= 0:
+	tlHTML = '<div id="tasks" data-tasklistid='+repr(tasklist_id)+'>'
+	for t in tl.task_set.all():
+		if t.status >= 0:
 			tlHTML += generateTaskForm(t)
 	tlHTML += '</div>'
-	return tlHTML
-
-
-	
+	return tlHTML	

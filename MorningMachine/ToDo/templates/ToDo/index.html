@@ -12,8 +12,9 @@
     <div class="widgetContainer" title="{{ tasklist.id }}" style="top:{{tasklist.top}};left:{{tasklist.left}}">
         <div class="widget" title="{{ tasklist.id }}" style="width:{{tasklist.width}};height:{{tasklist.height}}">
             <div class="TaskList" id="{{tasklist.id}}">
+                {% csrf_token %}
                 <h3><a href="tasklist/{{tasklist.id}}/">{{ tasklist.title }}</a></h3>
-                <div class="tasks">
+                <div class="tasks" data-tasklistid="{{tasklist.id}}">
                     {% for task in tasklist.task_set.all %}
                     {% if task.status >= 0 %}
                         <form action="{% url 'ToDo:check' task.id %}" method="post" data-taskid="{{task.id}}" data-taskStatus="{{task.status}}">
@@ -27,7 +28,6 @@
                     {% endif %}
                     {% endfor %}
                 </div>
-                <div id="result"></div>
             </div>
             <div class="buttons" title="{{ tasklist.id }}">
                 <div class="addTaskButton">
