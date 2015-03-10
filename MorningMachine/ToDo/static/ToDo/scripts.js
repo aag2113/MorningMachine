@@ -1,31 +1,4 @@
 $(document).ready(function(){
-    $('#mainBodyContainer .widgetContainer').draggable({
-			containment : "#mainBodyContainer",
-            handle: "h3",
-            stop: function( event, ui ) {saveWidgetPosition(this.title, ui.position.top, ui.position.left ); }
-		});
-
-	$('#mainBodyContainer .widget').resizable({
-		    minHeight: 150,
-		    minWidth: 200,
-		    stop: function( event, ui ) {saveWidgetSize(this.title, ui.size.width, ui.size.height); }
-		});
-
-	$('.taskTitle').editable({
-	    touch : true,
-	    lineBreaks : true, 
-	    toggleFontSize : false,
-	    closeOnEnter : true, 
-	    event : 'click',
-	    tinyMCE : false, 
-	    emptyMessage : '<em>Cant do nothing homie.</em>', 
-	    callback : function( data ) {
-	        if( data.content ) {
-	            updateTaskTitle(data.$el[0].parentElement.dataset.taskid, data.content);
-	        }
-	    }
-	});
-
 	$(".TaskList").on("click", ".tasks .task input", function(){
 		var token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
 		taskID = this.parentElement.dataset.taskid
@@ -39,6 +12,33 @@ $(document).ready(function(){
 	    });
 	});
 
+	$("#footer").on("click",".buttons .addTaskListButton", function(){
+		var token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+		jQuery.ajax({
+			type: "POST",
+			async: true,
+			url: '/ToDo/tasklist/create/',
+			data: {'title':'Tasks', 'csrfmiddlewaretoken': token},
+
+			success: function(msg){
+				$(msg.msg).appendTo('#mainBodyContainer')
+				$('.widgetContainer[data-tasklistid='+msg.tasklistid+']').draggable({
+					containment : "#mainBodyContainer",
+		            handle: "h3",
+		            stop: function( event, ui ) {saveWidgetPosition(this.title, ui.position.top, ui.position.left ); }
+				});
+				$('.widget[data-tasklistid='+msg.tasklistid+']').resizable({
+				    minHeight: 150,
+				    minWidth: 200,
+				    stop: function( event, ui ) {saveWidgetSize(this.title, ui.size.width, ui.size.height); }
+				});
+			},
+			error: function(err){
+				alert(err.responseText)
+			}
+		})
+	});
+
 	$('.addTaskButton').click(function(){
 		var token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
 		taskListID = this.parentElement.dataset.tasklistid
@@ -49,8 +49,7 @@ $(document).ready(function(){
 	        url: '/ToDo/task/create/',
 	        data:  { 'title': "newTask", 'csrfmiddlewaretoken': token, 'taskList': this.parentElement.dataset.tasklistid },
 
-	        success: function (msg) 
-	                { 
+	        success: function (msg) { 
 	                	console.log(msg)
 	                	console.log(msg.msg)
 	                	console.log(msg.taskid)
@@ -145,6 +144,33 @@ $(document).ready(function(){
 	        data:  { 'title': title, 'csrfmiddlewaretoken': token },
 	    });
 	}
+
+	$('#mainBodyContainer .widgetContainer').draggable({
+			containment : "#mainBodyContainer",
+            handle: "h3",
+            stop: function( event, ui ) {saveWidgetPosition(this.title, ui.position.top, ui.position.left ); }
+		});
+
+	$('#mainBodyContainer .widget').resizable({
+		    minHeight: 150,
+		    minWidth: 200,
+		    stop: function( event, ui ) {saveWidgetSize(this.title, ui.size.width, ui.size.height); }
+		});
+
+	$('.taskTitle').editable({
+	    touch : true,
+	    lineBreaks : true, 
+	    toggleFontSize : false,
+	    closeOnEnter : true, 
+	    event : 'click',
+	    tinyMCE : false, 
+	    emptyMessage : '<em>Cant do nothing homie.</em>', 
+	    callback : function( data ) {
+	        if( data.content ) {
+	            updateTaskTitle(data.$el[0].parentElement.dataset.taskid, data.content);
+	        }
+	    }
+	});
 });
 
 

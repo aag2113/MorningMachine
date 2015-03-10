@@ -9,8 +9,8 @@
 <div id="mainBodyContainer">
 {% if tasklists %}
 	{% for tasklist in tasklists %}
-    <div class="widgetContainer" title="{{ tasklist.id }}" style="top:{{tasklist.top}};left:{{tasklist.left}}">
-        <div class="widget" title="{{ tasklist.id }}" style="width:{{tasklist.width}};height:{{tasklist.height}}">
+    <div class="widgetContainer" title="{{ tasklist.id }}" data-tasklistid="{{tasklist.id}}" style="top:{{tasklist.top}};left:{{tasklist.left}}">
+        <div class="widget" title="{{ tasklist.id }}" data-tasklistid="{{tasklist.id}}" style="width:{{tasklist.width}};height:{{tasklist.height}}">
             <div class="TaskList" id="{{tasklist.id}}">
                 {% csrf_token %}
                 <h3><a href="tasklist/{{tasklist.id}}/">{{ tasklist.title }}</a></h3>
@@ -39,9 +39,7 @@
                 </div>
             </div>
         </div>
-    </form>
     </div>
-
 	{% endfor %}
 {% else %}
 	<p>No TaskLists are available.</p>

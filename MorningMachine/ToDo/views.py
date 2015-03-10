@@ -46,7 +46,13 @@ def createTask(request):
 	qd = request.POST
 	p = TaskList.objects.get(pk=qd.get('taskList'))
 	task = Task.objects.create(taskList=p, title=qd.get('title'))
-	response = JsonResponse({'taskid':task.id,'msg':generateTask(task)})
+	response = JsonResponse({'taskid':task.id,'msg':renderTask(task)})
+	return response
+
+def createTaskList(request):
+	qd = request.POST
+	taskList = TaskList.objects.create(title=qd.get('title'))
+	response = JsonResponse({'tasklistid':taskList.id,'msg':renderTaskList(taskList.id)})
 	return response
 
 def saveWidgetSize(request, tasklist_id):
@@ -77,9 +83,9 @@ def clearCompleted(request, tasklist_id):
 		if t.status == 1:
 			t.status=-1
 			t.save()
-	return HttpResponse(renderTaskList(tasklist_id))
+	return HttpResponse(renderTasks(tasklist_id))
 
-def generateTask(task):
+def renderTask(task):
 	result = '<div class="task" data-taskid="'+repr(task.id)+'">'
 	result += '<input type="checkbox"'
 	if task.status == 1:
@@ -88,11 +94,31 @@ def generateTask(task):
 	result += '<div class="taskTitle">'+task.title+'</div></div>'
 	return result
 
-def renderTaskList(tasklist_id):
+def renderTasks(tasklist_id):
 	tl = TaskList.objects.get(pk=tasklist_id)
 	tlHTML = '<div class="tasks" data-tasklistid="'+repr(int(tasklist_id))+'">'
 	for t in tl.task_set.all():
 		if t.status >= 0:
-			tlHTML += generateTask(t)
+			tlHTML += renderTask(t)
 	tlHTML += '</div>'
-	return tlHTML	
+	return tlHTML
+
+def renderTaskList(tasklist_id):
+	taskList = TaskList.objects.get(pk=tasklist_id)
+	HTML = '<div class="widgetContainer" title="'+repr(taskList.id)+'" data-tasklistid="'+repr(taskList.id)+'" style="top:'+repr(taskList.top)+';left:'+repr(taskList.left)+'">'
+	HTML += '<div class="widget" title="'+repr(taskList.id)+'" data-tasklistid="'+repr(taskList.id)+'" style="width:'+repr(taskList.width)+';height:'+repr(taskList.height)+'">'
+	HTML += '<div class="TaskList" id="'+repr(taskList.id)+'">'
+	HTML += '<h3><a href="tasklist/'+repr(taskList.id)+'/">'+taskList.title+'</a></h3>'
+	HTML += renderTasks(taskList.id)
+	HTML += '</div>'
+	HTML += '<div class="buttons" data-tasklistid="'+repr(taskList.id)+'">'
+	HTML += '<div class="addTaskButton">'
+	HTML += '<img src="/static/ToDo/plus.svg" width="15px" height="15px" />'
+	HTML += '</div>'
+	HTML += '<div class="trashButton">'
+	HTML += '<img src="/static/ToDo/trash.svg" width="15px" height="15px" />'
+	HTML += '</div>'
+	HTML += '</div>'
+	HTML += '</div>'
+	HTML += '</div>'
+	return HTML

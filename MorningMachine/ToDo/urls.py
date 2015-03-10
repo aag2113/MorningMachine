@@ -9,7 +9,7 @@ urlpatterns = patterns('',
                     # /ToDo/task/5/
                     url(r'^task/(?P<pk>\d+)/$', views.taskView.as_view(), name='task'),
 
-                    # /ToDo/task/5/createTask/
+                    # /ToDo/task/create/
                     url(r'^task/create/$', views.createTask, name='createTask'),
 
                     # /ToDo/task/5/check/
@@ -20,6 +20,9 @@ urlpatterns = patterns('',
 
                     # /ToDo/tasklist/1/
                     url(r'^tasklist/(?P<pk>\d+)/$', views.taskListView.as_view(), name='tasklist'),
+
+                    # /ToDo/tasklist/create/
+                    url(r'^tasklist/create/$', views.createTaskList, name='createTaskList'),
 
                     # /ToDo/tasklist/5/saveWidgetSize/
                     url(r'^tasklist/(?P<tasklist_id>\d+)/saveWidgetSize/$', views.saveWidgetSize, name='saveWidgetSize'),
