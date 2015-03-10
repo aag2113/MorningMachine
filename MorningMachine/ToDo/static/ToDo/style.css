@@ -46,7 +46,7 @@ a:active {
 	text-align: center;
     border-bottom: thin dotted;
 }
-.widget form{
+.task{
     padding: 2px 5px 2px 5px;
 }
 .taskTitle{
