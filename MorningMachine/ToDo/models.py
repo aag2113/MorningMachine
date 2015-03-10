@@ -9,6 +9,7 @@ class TaskList(models.Model):
     top = models.IntegerField(default=0)
     width = models.IntegerField(default=200)
     height = models.IntegerField(default=150)
+    status = models.IntegerField(default=1)
 
     def __unicode__(self):
         return self.title

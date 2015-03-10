@@ -7,12 +7,13 @@
 <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/themes/smoothness/jquery-ui.css" />
 
 <div id="mainBodyContainer">
+{% csrf_token %}
 {% if tasklists %}
 	{% for tasklist in tasklists %}
+    {% if tasklist.status == 1 %}
     <div class="widgetContainer" title="{{ tasklist.id }}" data-tasklistid="{{tasklist.id}}" style="top:{{tasklist.top}};left:{{tasklist.left}}">
         <div class="widget" title="{{ tasklist.id }}" data-tasklistid="{{tasklist.id}}" style="width:{{tasklist.width}};height:{{tasklist.height}}">
             <div class="TaskList" id="{{tasklist.id}}">
-                {% csrf_token %}
                 <h3><a href="tasklist/{{tasklist.id}}/">{{ tasklist.title }}</a></h3>
                 <div class="tasks" data-tasklistid="{{tasklist.id}}">
                     {% for task in tasklist.task_set.all %}
@@ -40,6 +41,7 @@
             </div>
         </div>
     </div>
+    {% endif %}
 	{% endfor %}
 {% else %}
 	<p>No TaskLists are available.</p>

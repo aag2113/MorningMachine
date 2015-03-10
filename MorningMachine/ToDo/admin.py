@@ -9,7 +9,7 @@ class TaskInline(admin.TabularInline):
 
 class TaskListAdmin(admin.ModelAdmin):
     fieldsets = [
-        (None,	{'fields': ['title']})
+        (None,	{'fields': ['status','title','left','top','width','height']})
     ]
     inlines = [TaskInline]
 
