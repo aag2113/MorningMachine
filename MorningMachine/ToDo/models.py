@@ -18,6 +18,7 @@ class Task(models.Model):
     taskList = models.ForeignKey(TaskList)
     title = models.CharField(max_length=200)
     created_date = models.DateTimeField('Date Created', default=datetime.datetime.now)
+    completed_date = models.DateTimeField('Date Completed', default=datetime.datetime.min)
     status = models.IntegerField(default=0)
 
     def __unicode__(self):
