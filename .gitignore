@@ -5,4 +5,5 @@ MorningMachine/ToDo/static/ToDo/smb_coin.wav
 MorningMachine/db.sqlite3
 MorningMachine/ToDo/migrations/
 MorningMachine/ToDo/static/ToDo/jquery.editable.min.js
+MorningMachine/ToDo/static/ToDo/jquery.editable.js
 MorningMachine/mySite/SECRET_KEY
