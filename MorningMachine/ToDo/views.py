@@ -5,6 +5,7 @@ from django.views import generic
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_protect
 import json
+import datetime
 
 from ToDo.models import TaskList, Task
 
@@ -29,9 +30,14 @@ def check(request, task_id):
 	try:
 		if p.status == 0:
 			p.status = 1
+			p.completed_date = datetime.datetime.now()
+			print p.completed_date
 		else:
 			p.status = 0
+			p.completed_date = datetime.datetime.min()
+			print p.completed_date
 		p.save()
+		print p.completed_date
 		return HttpResponse("success")
 	except (KeyError, Task.DoesNotExist):
 		return render(request, 'ToDo/task.html', {'task': p, 'error_message': "No Such task"})
