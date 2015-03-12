@@ -76,6 +76,27 @@ $(document).ready(function(){
 	    });
 	});
 
+	$('.closeWidgetButton').click(function(){
+		var token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+		taskListID = this.dataset.tasklistid
+		console.log(taskListID)
+		jQuery.ajax({
+			type: "POST",
+			async: true,
+			url: "/ToDo/tasklist/"+taskListID+"/remove/",
+			data: { 'csrfmiddlewaretoken': token, 'taskList': taskListID},
+
+			success: function(msg)
+			{
+				$('.widgetContainer[data-tasklistid="'+taskListID+'"]').remove()
+			},
+			error: function(err)
+			{
+				alert(err.responseText)
+			}
+		});
+	});
+
 	$('.trashButton').click(function(){
 		var token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
 		taskListID = this.parentElement.dataset.tasklistid

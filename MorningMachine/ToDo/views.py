@@ -69,6 +69,12 @@ def saveWidgetSize(request, tasklist_id):
 	p.save()
 	return HttpResponseRedirect(reverse('ToDo:index'))
 
+def removeTaskList(request, tasklist_id):
+	p = get_object_or_404(TaskList, pk=tasklist_id)
+	p.status = -p.status
+	p.save()
+	return HttpResponseRedirect(reverse('ToDo:index'))
+
 def saveWidgetPos(request, tasklist_id):
 	p = get_object_or_404(TaskList, pk=tasklist_id)
 	qd = request.POST
