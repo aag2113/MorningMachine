@@ -35,4 +35,7 @@ urlpatterns = patterns('',
 
                     # /ToDo/tasklist/5/clearCompleted/
                     url(r'^tasklist/(?P<tasklist_id>\d+)/clearCompleted/$', views.clearCompleted, name='clearCompleted'),
+
+                    # /ToDo/tasklist/5/updateOrder/
+                    url(r'^tasklist/(?P<tasklist_id>\d+)/updateOrder/$', views.updateOrder, name='updateOrder'),
 )

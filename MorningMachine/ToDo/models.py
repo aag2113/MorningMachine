@@ -21,6 +21,10 @@ class Task(models.Model):
     created_date = models.DateTimeField('Date Created', default=datetime.datetime.now)
     completed_date = models.DateTimeField('Date Completed', default=datetime.datetime.min)
     status = models.IntegerField(default=0)
+    sortOrder = models.IntegerField(default=2147483647)
+
+    class Meta:
+        ordering = ['sortOrder','status','created_date']
 
     def __unicode__(self):
         return self.title

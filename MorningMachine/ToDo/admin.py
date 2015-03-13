@@ -15,7 +15,7 @@ class TaskListAdmin(admin.ModelAdmin):
 
 
 class TaskAdmin(admin.ModelAdmin):
-    list_display = ('title', 'status', 'created_date','completed_date')
+    list_display = ('title', 'status', 'created_date','completed_date','sortOrder')
     list_filter = ['status', 'created_date']
     search_fields = ['title']
 

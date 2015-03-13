@@ -192,6 +192,22 @@ $(document).ready(function(){
 	        }
 	    }
 	});
+
+	$('.tasks').sortable({
+		axis: 'y',
+		update: function(event, ui){
+			var token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+			var data = $(this).sortable('toArray', {attribute:"data-taskid"});
+			tasklistid = this.dataset.tasklistid;
+
+			jQuery.ajax({
+				data: { 'data': data, 'csrfmiddlewaretoken': token },
+				type: 'POST',
+				url: "/ToDo/tasklist/"+tasklistid+"/updateOrder/"
+			});
+		}
+	});
+	$('.tasks').disableSelection();
 });
 
 

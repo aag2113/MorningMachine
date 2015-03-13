@@ -20,17 +20,17 @@
                 <h3><a href="tasklist/{{tasklist.id}}/">{{ tasklist.title }}</a>
                 <div class="closeWidgetButton" data-tasklistid="{{tasklist.id}}"><img src="/static/ToDo/x.svg" width="7px" height="7px" /></div></h3>
 
-                <div class="tasks" data-tasklistid="{{tasklist.id}}">
+                <ul class="tasks" data-tasklistid="{{tasklist.id}}">
                     {% for task in tasklist.task_set.all %}
                     {% if task.status >= 0 %}
-                        <div class="task" data-taskid="{{task.id}}">
+                        <li class="task" data-taskid="{{task.id}}">
                             <input type="checkbox"{% if task.status == 1 %}checked{% endif %}></input>
                             <div class="taskTitle">{{ task.title }}</div>
                             <br />
-                        </div>
+                        </li>
                     {% endif %}
                     {% endfor %}
-                </div>
+                </ul>
             </div>
             <div class="buttons" data-tasklistid="{{ tasklist.id }}">
                 <div class="addTaskButton">
