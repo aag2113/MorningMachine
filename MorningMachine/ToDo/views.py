@@ -97,6 +97,17 @@ def clearCompleted(request, tasklist_id):
 			t.save()
 	return HttpResponse(renderTasks(tasklist_id))
 
+def updateOrder(request, tasklist_id):
+	print 'tasklistid: %s' % tasklist_id
+	print 'request: %s' % request.POST
+	data = request.POST.getlist('data[]')
+	for i, item in enumerate(data):
+		print repr(i) + " " + repr(item)
+		task = get_object_or_404(Task, pk = item)
+		task.sortOrder = i
+		task.save()
+	return HttpResponseRedirect(reverse('ToDo:index'))
+
 def renderTask(task):
 	result = '<div class="task" data-taskid="'+repr(task.id)+'">'
 	result += '<input type="checkbox"'
@@ -108,11 +119,11 @@ def renderTask(task):
 
 def renderTasks(tasklist_id):
 	tl = TaskList.objects.get(pk=tasklist_id)
-	tlHTML = '<div class="tasks" data-tasklistid="'+repr(int(tasklist_id))+'">'
+	tlHTML = '<ul class="tasks" data-tasklistid="'+repr(int(tasklist_id))+'">'
 	for t in tl.task_set.all():
 		if t.status >= 0:
 			tlHTML += renderTask(t)
-	tlHTML += '</div>'
+	tlHTML += '</ul>'
 	return tlHTML
 
 def renderTaskList(tasklist_id):
