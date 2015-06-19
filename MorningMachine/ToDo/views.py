@@ -27,6 +27,8 @@ class taskListView(generic.DetailView):
 def check(request, task_id):
 	p = get_object_or_404(Task, pk=task_id)
 	print p.title
+	print p.status == 0
+	print p.status == 1
 	try:
 		if p.status == 0:
 			p.status = 1
@@ -34,10 +36,9 @@ def check(request, task_id):
 			print p.completed_date
 		else:
 			p.status = 0
-			p.completed_date = datetime.datetime.min()
+			p.completed_date = datetime.datetime.min
 			print p.completed_date
 		p.save()
-		print p.completed_date
 		return HttpResponse("success")
 	except (KeyError, Task.DoesNotExist):
 		return render(request, 'ToDo/task.html', {'task': p, 'error_message': "No Such task"})
@@ -82,6 +83,7 @@ def saveWidgetPos(request, tasklist_id):
 		p.top = qd.get('t')
 	else:
 		p.top = 0
+
 	if qd.get('l') > 0:
 		p.left = qd.get('l')
 	else:
