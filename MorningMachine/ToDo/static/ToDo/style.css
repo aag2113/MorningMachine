@@ -90,3 +90,7 @@ a:active {
 	margin: 5px;
 	display: inline;
 }
+.dragHandle{
+	display: inline;
+	padding: 0 5px 0 0;
+}

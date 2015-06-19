@@ -211,6 +211,7 @@ $(document).ready(function(){
 
 	$('.tasks').sortable({
 		axis: 'y',
+		handle: '.dragHandle',
 		update: function(event, ui){
 			var token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
 			var data = $(this).sortable('toArray', {attribute:"data-taskid"});

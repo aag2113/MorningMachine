@@ -24,7 +24,9 @@
                     {% for task in tasklist.task_set.all %}
                     {% if task.status >= 0 %}
                         <li class="task" data-taskid="{{task.id}}">
+                            <img class="dragHandle" src="/static/ToDo/dragHandle.svg" width="10px" height="13px" />
                             <input type="checkbox"{% if task.status == 1 %}checked{% endif %}></input>
+
                             <div class="taskTitle">{{ task.title }}</div>
                             <br />
                         </li>
