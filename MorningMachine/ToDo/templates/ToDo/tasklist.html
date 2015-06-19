@@ -10,22 +10,15 @@
 
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
-
-{% for task in tasklist.task_set.all|dictsortreversed:"status" %}
-	<form action="{% url 'ToDo:check' task.id %}" method="post" data-taskid="{{task.id}}">
-        {% csrf_token %}
-        <input type="checkbox" class="task" name="task" value="{{task.id}}" id="{{task.id}}"
-        {% if task.status == 1 or task.status == -1 %}
-            checked
-        {% endif %}
-        > <div 
-        {% if task.status == -1 %}
-        	class="taskTitleCompleted"
-        {% else %}
-        	class="taskTitle"
-        {% endif %}
-        title="{{ task.id }}">{{ task.title }}</div></input><br />
-    </form>
-{% endfor %}
+{% csrf_token %}
+    <ul class="tasks" data-tasklistid="{{tasklist.id}}">
+        {% for task in tasklist.task_set.all|dictsortreversed:"status" %}
+            <li class="task" data-taskid="{{task.id}}">
+                <input type="checkbox"{% if task.status == 1 or task.status == -1 %}checked{% endif %}></input>
+                <div class={% if task.status == -1 %}"taskTitleCompleted"{% else %}"taskTitle"{% endif %}>{{ task.title }}</div>
+                <br />
+            </li>
+        {% endfor %}
+    </ul>
 
 <script type="text/javascript" src="{% static 'ToDo/scripts.js' %}"></script>

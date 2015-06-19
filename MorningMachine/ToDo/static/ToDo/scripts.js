@@ -1,5 +1,6 @@
 $(document).ready(function(){
-	$(".TaskList").on("click", ".tasks .task input", function(){
+
+	$(".task input").click(function(){
 		var token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
 		taskID = this.parentElement.dataset.taskid
 		console.log("clicked")
@@ -12,7 +13,7 @@ $(document).ready(function(){
 	    });
 	});
 
-	$("#footer").on("click",".buttons .addTaskListButton", function(){
+	$(".addTaskListButton").click(function(){
 		var token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
 		jQuery.ajax({
 			type: "POST",
