@@ -6,7 +6,7 @@
 <script type="text/javascript" src="{% static 'ToDo/jquery.editable.min.js' %}"></script>
 <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.1/themes/base/jquery-ui.css"/>
 
-<h1>{{ tasklist.title }}</h1>
+<h1><div class="taskListTitle" data-tasklistid="{{tasklist.id}}">{{ tasklist.title }}</div></h1>
 
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 

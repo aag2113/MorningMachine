@@ -49,6 +49,12 @@ def updateTitle(request, task_id):
 	p.save()
 	return HttpResponseRedirect(reverse('ToDo:index'))
 
+def TLupdateTitle(request, tasklist_id):
+	p = get_object_or_404(TaskList, pk=tasklist_id)
+	p.title = request.POST.get('title')
+	p.save()
+	return HttpResponseRedirect(reverse('ToDo:index'))
+
 def createTask(request):
 	qd = request.POST
 	p = TaskList.objects.get(pk=qd.get('taskList'))
@@ -111,12 +117,13 @@ def updateOrder(request, tasklist_id):
 	return HttpResponseRedirect(reverse('ToDo:index'))
 
 def renderTask(task):
-	result = '<div class="task" data-taskid="'+repr(task.id)+'">'
+	result = '<li class="task" data-taskid="'+repr(task.id)+'">'
+	result += '<img class="dragHandle" src="/static/ToDo/dragHandle.svg" width="10px" height="13px" />'
 	result += '<input type="checkbox"'
 	if task.status == 1:
 		result += ' checked'
 	result += '></input>'
-	result += '<div class="taskTitle">'+task.title+'</div></div>'
+	result += '<div class="taskTitle">'+task.title+'</div><br /></li>'
 	return result
 
 def renderTasks(tasklist_id):

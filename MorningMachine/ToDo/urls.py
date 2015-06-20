@@ -18,6 +18,9 @@ urlpatterns = patterns('',
                     # /ToDo/task/5/updateTitle/
                     url(r'^task/(?P<task_id>\d+)/updateTitle/$', views.updateTitle, name='updateTitle'),
 
+                    # /ToDo/taskList/5/updateTitle/
+                    url(r'^taskList/(?P<tasklist_id>\d+)/updateTitle/$', views.TLupdateTitle, name='TLupdateTitle'),
+
                     # /ToDo/tasklist/1/
                     url(r'^tasklist/(?P<pk>\d+)/$', views.taskListView.as_view(), name='tasklist'),
 

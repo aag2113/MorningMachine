@@ -182,6 +182,16 @@ $(document).ready(function(){
 	    });
 	}
 
+	function updateTaskListTitle(id, title){
+		var token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+		jQuery.ajax({
+	        type: "POST",
+	        async: true,
+	        url: "/ToDo/taskList/"+id+"/updateTitle/",
+	        data:  { 'title': title, 'csrfmiddlewaretoken': token },
+	    });
+	}
+
 	$('#mainBodyContainer .widgetContainer').draggable({
 			containment : "#mainBodyContainer",
             handle: "h3",
@@ -224,7 +234,23 @@ $(document).ready(function(){
 			});
 		}
 	});
+
 	$('.tasks').disableSelection();
+
+	$('.taskListTitle').editable({
+	    touch : true,
+	    lineBreaks : true, 
+	    toggleFontSize : false,
+	    closeOnEnter : true, 
+	    event : 'click',
+	    tinyMCE : false, 
+	    emptyMessage : '<em>Gotta have a title player.</em>', 
+	    callback : function( data ) {
+	        if( data.content ) {
+	            updateTaskListTitle(data.$el[0].dataset.tasklistid, data.content);
+	        }
+	    }
+	});
 });
 
 
