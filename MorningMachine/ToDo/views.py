@@ -140,7 +140,8 @@ def renderTaskList(tasklist_id):
 	HTML = '<div class="widgetContainer" title="'+repr(taskList.id)+'" data-tasklistid="'+repr(taskList.id)+'" style="top:'+repr(taskList.top)+';left:'+repr(taskList.left)+'">'
 	HTML += '<div class="widget" title="'+repr(taskList.id)+'" data-tasklistid="'+repr(taskList.id)+'" style="width:'+repr(taskList.width)+';height:'+repr(taskList.height)+'">'
 	HTML += '<div class="TaskList" id="'+repr(taskList.id)+'">'
-	HTML += '<h3><a href="tasklist/'+repr(taskList.id)+'/">'+taskList.title+'</a></h3>'
+	HTML += '<h3><a href="tasklist/'+repr(taskList.id)+'/">'+taskList.title+'</a>'
+	HTML += '<div class="closeWidgetButton" data-tasklistid="'+repr(taskList.id)+'"><img src="/static/ToDo/x.svg" width="7px" height="7px" /></div></h3>'
 	HTML += renderTasks(taskList.id)
 	HTML += '</div>'
 	HTML += '<div class="buttons" data-tasklistid="'+repr(taskList.id)+'">'

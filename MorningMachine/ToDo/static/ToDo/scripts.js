@@ -1,20 +1,33 @@
-$(document).ready(function(){
+var taskTitleEditableOpts = {
+    touch : true,
+    lineBreaks : true, 
+    toggleFontSize : false,
+    closeOnEnter : true, 
+    event : 'click',
+    tinyMCE : false, 
+    emptyMessage : '<em>Cant do nothing homie.</em>', 
+    callback : function( data ) {
+        if( data.content ) {
+            updateTaskTitle(data.$el[0].parentElement.dataset.taskid, data.content);
+        }
+    }
+}
 
-	$(".task input").click(function(){
-		var token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
-		taskID = this.parentElement.dataset.taskid
-		console.log("clicked")
-		console.log(taskID)
-		jQuery.ajax({
-	        type: "POST",
-	        async: true,
-	        url: '/ToDo/task/'+taskID+'/check/',
-	        data:  { 'csrfmiddlewaretoken': token },
-	    });
-	});
+function checkTask(){
+	var token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+	taskID = this.parentElement.dataset.taskid
+	console.log("clicked")
+	console.log(taskID)
+	jQuery.ajax({
+        type: "POST",
+        async: true,
+        url: '/ToDo/task/'+taskID+'/check/',
+        data:  { 'csrfmiddlewaretoken': token },
+    });
+}
 
-	$(".addTaskListButton").click(function(){
-		var token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+function addTaskList(){
+	var token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
 		jQuery.ajax({
 			type: "POST",
 			async: true,
@@ -33,17 +46,18 @@ $(document).ready(function(){
 				    minWidth: 200,
 				    stop: function( event, ui ) {saveWidgetSize(this.title, ui.size.width, ui.size.height); }
 				});
+				$('.widget[data-tasklistid='+msg.tasklistid+'] .closeWidgetButton').click(closeWidget)
 			},
 			error: function(err){
 				alert(err.responseText)
 			}
-		})
-	});
+		});
+}
 
-	$('.addTaskButton').click(function(){
-		var token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
-		taskListID = this.parentElement.dataset.tasklistid
-		console.log(taskListID)
+function addTask(){
+	var token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+		taskListID = this.parentElement.dataset.tasklistid;
+		console.log(taskListID);
 		jQuery.ajax({
 	        type: "POST",
 	        async: true,
@@ -51,52 +65,96 @@ $(document).ready(function(){
 	        data:  { 'title': "newTask", 'csrfmiddlewaretoken': token, 'taskList': this.parentElement.dataset.tasklistid },
 
 	        success: function (msg) { 
-	                	console.log(msg)
-	                	console.log(msg.msg)
-	                	console.log(msg.taskid)
-	                	$('.tasks[data-tasklistid='+taskListID+']').append(msg.msg)
-	                	$('.task[data-taskid='+msg.taskid+'] .TaskTitle').editable({
-						    touch : true,
-						    lineBreaks : true, 
-						    toggleFontSize : false,
-						    closeOnEnter : true, 
-						    event : 'click',
-						    tinyMCE : false, 
-						    emptyMessage : '<em>Cant do nothing homie.</em>', 
-						    callback : function( data ) {
-						        if( data.content ) {
-						            updateTaskTitle(data.$el[0].parentElement.dataset.taskid, data.content);
-						        }
-						    }
-						});
+	                	console.log(msg);
+	                	console.log(msg.msg);
+	                	console.log(msg.taskid);
+	                	$('.tasks[data-tasklistid='+taskListID+']').append(msg.msg);
+	                	$('.tasks').sortable('refresh');
+	                	$('.task[data-taskid='+msg.taskid+'] .TaskTitle').editable(taskTitleEditableOpts);
+	                	$('.task[data-taskid='+msg.taskid+'] input').click(checkTask);
+	                	$('.task[data-taskid='+msg.taskid+'] .TaskTitle').trigger('click');
 	                },
 	        error: function (err)
 	        		{ 
-	        			alert(err.responseText)
+	        			alert(err.responseText);
 	        		}
 	    });
-	});
+}
 
-	$('.closeWidgetButton').click(function(){
-		var token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
-		taskListID = this.dataset.tasklistid
-		console.log(taskListID)
-		jQuery.ajax({
-			type: "POST",
-			async: true,
-			url: "/ToDo/tasklist/"+taskListID+"/remove/",
-			data: { 'csrfmiddlewaretoken': token, 'taskList': taskListID},
+function saveWidgetPosition(id, top, left){
+	console.log(top);
+	console.log(left);
+	var token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+	jQuery.ajax({
+        type: "POST",
+        async: true,
+        url: "/ToDo/tasklist/"+id+"/saveWidgetPos/",
+        data:  { 't': top, 'l':left, 'csrfmiddlewaretoken': token },
+    });
+}
 
-			success: function(msg)
-			{
-				$('.widgetContainer[data-tasklistid="'+taskListID+'"]').remove()
-			},
-			error: function(err)
-			{
-				alert(err.responseText)
-			}
-		});
+function updateTaskTitle(id, title){
+	var token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+	jQuery.ajax({
+        type: "POST",
+        async: true,
+        url: "/ToDo/task/"+id+"/updateTitle/",
+        data:  { 'title': title, 'csrfmiddlewaretoken': token },
+    });
+}
+
+function updateTaskListTitle(id, title){
+	var token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+	jQuery.ajax({
+        type: "POST",
+        async: true,
+        url: "/ToDo/taskList/"+id+"/updateTitle/",
+        data:  { 'title': title, 'csrfmiddlewaretoken': token },
+    });
+}
+
+function saveWidgetSize(id, width, height){
+	console.log(width);
+	console.log(height);
+	var token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+	jQuery.ajax({
+        type: "POST",
+        async: true,
+        url: "/ToDo/tasklist/"+id+"/saveWidgetSize/",
+        data:  { 'w': width, 'h':height, 'csrfmiddlewaretoken': token },
+    });
+}
+
+function closeWidget(){
+	var token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+	taskListID = this.dataset.tasklistid
+	console.log(taskListID)
+	jQuery.ajax({
+		type: "POST",
+		async: true,
+		url: "/ToDo/tasklist/"+taskListID+"/remove/",
+		data: { 'csrfmiddlewaretoken': token, 'taskList': taskListID},
+
+		success: function(msg)
+		{
+			$('.widgetContainer[data-tasklistid="'+taskListID+'"]').remove()
+		},
+		error: function(err)
+		{
+			alert(err.responseText)
+		}
 	});
+}
+
+$(document).ready(function(){
+
+	$(".task input").click(checkTask);
+
+	$(".addTaskListButton").click(addTaskList);
+
+	$('.addTaskButton').click(addTask);
+
+	$('.closeWidgetButton').click(closeWidget);
 
 	$('.trashButton').click(function(){
 		var token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
@@ -111,20 +169,7 @@ $(document).ready(function(){
 	        success: function(msg)
 				{
 					$('.tasks[data-tasklistid="' + taskListID + '"]').replaceWith(msg)
-					$('.taskTitle').editable({
-						    touch : true,
-						    lineBreaks : true, 
-						    toggleFontSize : false,
-						    closeOnEnter : true, 
-						    event : 'click',
-						    tinyMCE : false, 
-						    emptyMessage : '<em>Cant do nothing homie.</em>', 
-						    callback : function( data ) {
-						        if( data.content ) {
-						            updateTaskTitle(data.$el[0].parentElement.dataset.taskid, data.content);
-						        }
-						    }
-						});
+					$('.taskTitle').editable(taskTitleEditableOpts);
 					$('.tasks').sortable({
 						axis: 'y',
 						update: function(event, ui){
@@ -138,8 +183,7 @@ $(document).ready(function(){
 								url: "/ToDo/tasklist/"+tasklistid+"/updateOrder/"
 							});
 						}
-					});
-					$('.tasks').disableSelection();
+					}).disableSelection();
 				},
 			error: function(err)
 				{
@@ -147,50 +191,6 @@ $(document).ready(function(){
 				}
 	    });
 	});
-
-	function saveWidgetSize(id, width, height){
-		console.log(width);
-		console.log(height);
-		var token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
-		jQuery.ajax({
-	        type: "POST",
-	        async: true,
-	        url: "/ToDo/tasklist/"+id+"/saveWidgetSize/",
-	        data:  { 'w': width, 'h':height, 'csrfmiddlewaretoken': token },
-	    });
-	}
-
-	function saveWidgetPosition(id, top, left){
-		console.log(top);
-		console.log(left);
-		var token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
-		jQuery.ajax({
-	        type: "POST",
-	        async: true,
-	        url: "/ToDo/tasklist/"+id+"/saveWidgetPos/",
-	        data:  { 't': top, 'l':left, 'csrfmiddlewaretoken': token },
-	    });
-	}
-
-	function updateTaskTitle(id, title){
-		var token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
-		jQuery.ajax({
-	        type: "POST",
-	        async: true,
-	        url: "/ToDo/task/"+id+"/updateTitle/",
-	        data:  { 'title': title, 'csrfmiddlewaretoken': token },
-	    });
-	}
-
-	function updateTaskListTitle(id, title){
-		var token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
-		jQuery.ajax({
-	        type: "POST",
-	        async: true,
-	        url: "/ToDo/taskList/"+id+"/updateTitle/",
-	        data:  { 'title': title, 'csrfmiddlewaretoken': token },
-	    });
-	}
 
 	$('#mainBodyContainer .widgetContainer').draggable({
 			containment : "#mainBodyContainer",
@@ -204,20 +204,7 @@ $(document).ready(function(){
 		    stop: function( event, ui ) {saveWidgetSize(this.title, ui.size.width, ui.size.height); }
 		});
 
-	$('.taskTitle').editable({
-	    touch : true,
-	    lineBreaks : true, 
-	    toggleFontSize : false,
-	    closeOnEnter : true, 
-	    event : 'click',
-	    tinyMCE : false, 
-	    emptyMessage : '<em>Cant do nothing homie.</em>', 
-	    callback : function( data ) {
-	        if( data.content ) {
-	            updateTaskTitle(data.$el[0].parentElement.dataset.taskid, data.content);
-	        }
-	    }
-	});
+	$('.taskTitle').editable(taskTitleEditableOpts);
 
 	$('.tasks').sortable({
 		axis: 'y',
@@ -233,9 +220,7 @@ $(document).ready(function(){
 				url: "/ToDo/tasklist/"+tasklistid+"/updateOrder/"
 			});
 		}
-	});
-
-	$('.tasks').disableSelection();
+	}).disableSelection();
 
 	$('.taskListTitle').editable({
 	    touch : true,
