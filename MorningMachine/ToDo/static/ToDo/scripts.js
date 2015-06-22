@@ -135,6 +135,40 @@ function closeWidget(){
 	});
 }
 
+function clearCompleted(){
+	taskListID = this.parentElement.dataset.tasklistid
+	jQuery.ajax({
+        type: "POST",
+        async: true,
+        url: "/ToDo/tasklist/"+taskListID+"/clearCompleted/",
+        data:  { 'csrfmiddlewaretoken': token, 'taskList': taskListID },
+
+        success: function(msg)
+			{
+				$('.tasks[data-tasklistid="' + taskListID + '"]').replaceWith(msg)
+				$('.taskTitle').editable(taskTitleEditableOpts);
+				$('.tasks').sortable({
+					axis: 'y',
+					update: function(event, ui){
+						
+						var data = $(this).sortable('toArray', {attribute:"data-taskid"});
+						tasklistid = this.dataset.tasklistid;
+
+						jQuery.ajax({
+							data: { 'data': data, 'csrfmiddlewaretoken': token },
+							type: 'POST',
+							url: "/ToDo/tasklist/"+tasklistid+"/updateOrder/"
+						});
+					}
+				}).disableSelection();
+			},
+		error: function(err)
+			{
+				alert(err.responseText)
+			}
+    });
+}
+
 $(document).ready(function(){
 
 	$(".task input").click(checkTask);
@@ -145,39 +179,7 @@ $(document).ready(function(){
 
 	$('.closeWidgetButton').click(closeWidget);
 
-	$('.trashButton').click(function(){
-		taskListID = this.parentElement.dataset.tasklistid
-		jQuery.ajax({
-	        type: "POST",
-	        async: true,
-	        url: "/ToDo/tasklist/"+taskListID+"/clearCompleted/",
-	        data:  { 'csrfmiddlewaretoken': token, 'taskList': taskListID },
-
-	        success: function(msg)
-				{
-					$('.tasks[data-tasklistid="' + taskListID + '"]').replaceWith(msg)
-					$('.taskTitle').editable(taskTitleEditableOpts);
-					$('.tasks').sortable({
-						axis: 'y',
-						update: function(event, ui){
-							
-							var data = $(this).sortable('toArray', {attribute:"data-taskid"});
-							tasklistid = this.dataset.tasklistid;
-
-							jQuery.ajax({
-								data: { 'data': data, 'csrfmiddlewaretoken': token },
-								type: 'POST',
-								url: "/ToDo/tasklist/"+tasklistid+"/updateOrder/"
-							});
-						}
-					}).disableSelection();
-				},
-			error: function(err)
-				{
-					alert(err.responseText)
-				}
-	    });
-	});
+	$('.trashButton').click(clearCompleted);
 
 	$('#mainBodyContainer .widgetContainer').draggable({
 			containment : "#mainBodyContainer",
