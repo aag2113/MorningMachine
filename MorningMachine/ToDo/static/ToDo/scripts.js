@@ -16,7 +16,6 @@ var taskTitleEditableOpts = {
 }
 
 function checkTask(){
-	
 	taskID = this.parentElement.dataset.taskid
 	console.log("clicked")
 	console.log(taskID)
@@ -29,7 +28,6 @@ function checkTask(){
 }
 
 function addTaskList(){
-	
 		jQuery.ajax({
 			type: "POST",
 			async: true,
@@ -57,7 +55,6 @@ function addTaskList(){
 }
 
 function addTask(){
-	
 		taskListID = this.parentElement.dataset.tasklistid;
 		console.log(taskListID);
 		jQuery.ajax({
@@ -84,9 +81,6 @@ function addTask(){
 }
 
 function saveWidgetPosition(id, top, left){
-	console.log(top);
-	console.log(left);
-	
 	jQuery.ajax({
         type: "POST",
         async: true,
@@ -96,7 +90,6 @@ function saveWidgetPosition(id, top, left){
 }
 
 function updateTaskTitle(id, title){
-	
 	jQuery.ajax({
         type: "POST",
         async: true,
@@ -106,7 +99,6 @@ function updateTaskTitle(id, title){
 }
 
 function updateTaskListTitle(id, title){
-	
 	jQuery.ajax({
         type: "POST",
         async: true,
@@ -116,9 +108,6 @@ function updateTaskListTitle(id, title){
 }
 
 function saveWidgetSize(id, width, height){
-	console.log(width);
-	console.log(height);
-	
 	jQuery.ajax({
         type: "POST",
         async: true,
@@ -128,9 +117,7 @@ function saveWidgetSize(id, width, height){
 }
 
 function closeWidget(){
-	
 	taskListID = this.dataset.tasklistid
-	console.log(taskListID)
 	jQuery.ajax({
 		type: "POST",
 		async: true,
@@ -159,9 +146,7 @@ $(document).ready(function(){
 	$('.closeWidgetButton').click(closeWidget);
 
 	$('.trashButton').click(function(){
-		
 		taskListID = this.parentElement.dataset.tasklistid
-		console.log(taskListID)
 		jQuery.ajax({
 	        type: "POST",
 	        async: true,
@@ -239,8 +224,3 @@ $(document).ready(function(){
 	    }
 	});
 });
-
-
-
-
-
