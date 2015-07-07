@@ -7,5 +7,3 @@ MorningMachine/ToDo/migrations/
 MorningMachine/ToDo/static/ToDo/jquery.editable.min.js
 MorningMachine/ToDo/static/ToDo/jquery.editable.js
 MorningMachine/mySite/SECRET_KEY.conf
-MorningMachine/mySite/wsgi.py
-MorningMachine/manage.py
