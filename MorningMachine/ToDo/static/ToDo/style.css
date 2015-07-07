@@ -21,6 +21,10 @@ a:active {
     text-decoration: underline;
 }
 
+#swaplist {
+	height: 0;
+}
+
 #headerContainer {
 	position: relative;
 	overflow: hidden;

@@ -112,6 +112,8 @@ def updateOrder(request, tasklist_id):
 	for i, item in enumerate(data):
 		print repr(i) + " " + repr(item)
 		task = get_object_or_404(Task, pk = item)
+		taskList = TaskList.objects.get(pk=tasklist_id)
+		task.taskList = taskList
 		task.sortOrder = i
 		task.save()
 	return HttpResponseRedirect(reverse('ToDo:index'))

@@ -1,13 +1,15 @@
 {% spaceless %}
 {% load staticfiles %}
 
+<link rel="stylesheet" type="text/css" href="{% static 'ToDo/reset.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'ToDo/style.css' %}" />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
 <script type="text/javascript" src="{% static 'ToDo/jquery.editable.min.js' %}"></script>
-<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/themes/smoothness/jquery-ui.css" />
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
 
 <div id="mainBodyContainer">
+<div id="swaplist"></div>
 
 {% csrf_token %}
 {% if tasklists %}

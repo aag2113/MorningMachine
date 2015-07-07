@@ -196,10 +196,12 @@ $(document).ready(function(){
 	$('.taskTitle').editable(taskTitleEditableOpts);
 
 	$('.tasks').sortable({
-		axis: 'y',
+		connectWith: '.tasks',
 		handle: '.dragHandle',
+		helper: 'clone',
+		appendTo: '#swaplist',
+
 		update: function(event, ui){
-			
 			var data = $(this).sortable('toArray', {attribute:"data-taskid"});
 			tasklistid = this.dataset.tasklistid;
 
