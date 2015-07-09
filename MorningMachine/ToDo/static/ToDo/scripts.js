@@ -15,6 +15,24 @@ var taskTitleEditableOpts = {
     }
 }
 
+var taskListSortableOpts = {
+	connectWith: '.tasks',
+	handle: '.dragHandle',
+	helper: 'clone',
+	appendTo: '#swaplist',
+
+	update: function(event, ui){
+		var data = $(this).sortable('toArray', {attribute:"data-taskid"});
+		tasklistid = this.dataset.tasklistid;
+
+		jQuery.ajax({
+			data: { 'data': data, 'csrfmiddlewaretoken': token },
+			type: 'POST',
+			url: "/ToDo/tasklist/"+tasklistid+"/updateOrder/"
+		});
+	}
+}
+
 function checkTask(){
 	taskID = this.parentElement.dataset.taskid
 	console.log("clicked")
@@ -46,7 +64,9 @@ function addTaskList(){
 				    minWidth: 200,
 				    stop: function( event, ui ) {saveWidgetSize(this.title, ui.size.width, ui.size.height); }
 				});
+				$('.tasks').sortable(taskListSortableOpts).disableSelection();
 				$('.widget[data-tasklistid='+msg.tasklistid+'] .closeWidgetButton').click(closeWidget)
+				$('.addTaskButton').click(addTask);
 			},
 			error: function(err){
 				alert(err.responseText)
@@ -195,23 +215,7 @@ $(document).ready(function(){
 
 	$('.taskTitle').editable(taskTitleEditableOpts);
 
-	$('.tasks').sortable({
-		connectWith: '.tasks',
-		handle: '.dragHandle',
-		helper: 'clone',
-		appendTo: '#swaplist',
-
-		update: function(event, ui){
-			var data = $(this).sortable('toArray', {attribute:"data-taskid"});
-			tasklistid = this.dataset.tasklistid;
-
-			jQuery.ajax({
-				data: { 'data': data, 'csrfmiddlewaretoken': token },
-				type: 'POST',
-				url: "/ToDo/tasklist/"+tasklistid+"/updateOrder/"
-			});
-		}
-	}).disableSelection();
+	$('.tasks').sortable(taskListSortableOpts).disableSelection();
 
 	$('.taskListTitle').editable({
 	    touch : true,
